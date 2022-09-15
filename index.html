@@ -13,9 +13,22 @@
         integrity="sha384-X8QTME3FCg1DLb58++lPvsjbQoCT9bp3MsUU3grbIny/3ZwUJkRNO8NPW6zqzuW9" crossorigin="anonymous">
 
     <title>Task List</title>
+    <style>
+        body {
+            background: url("./Assets/notebook-paper-write-postcards-memories-wallpaper.jpg");
+        }
+
+        h2 {
+            color: peru;
+            -webkit-text-stroke: 2px black;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="container">
+        <h2>My Task list</h2>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col s12">
@@ -36,7 +49,7 @@
                         <h5 id="task-title">Tasks</h5>
                         <div class="input-field col s12">
                             <input type="text" name="filter" id="filter">
-                            <label for="filter">Filter Tasks</label>
+                            <label for="filter">Search</label>
                         </div>
                         <ul class="collection"></ul>
                         <a href="#" class="clear-tasks btn black">Clear Tasks</a>

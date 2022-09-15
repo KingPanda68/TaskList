@@ -8,6 +8,9 @@ loadEventListeners();
 
 // Load all Event Listeners
 function loadEventListeners() {
+  // DOM load task
+  document.addEventListener("DOMContentLoaded", getTasks);
+
   // add task
   form.addEventListener("submit", addTask);
 
@@ -19,6 +22,42 @@ function loadEventListeners() {
 
   // filter tasks
   filter.addEventListener("keyup", filterTasks);
+}
+
+// Get task
+function getTasks() {
+  let tasks;
+  if (localStorage.getItem("tasks") === null) {
+    tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem("tasks"));
+  }
+
+  tasks.forEach(function (task) {
+    //   create li
+    const li = document.createElement("li");
+
+    //   add a class
+    li.className = "collection-item";
+
+    //   create text node and append
+    li.appendChild(document.createTextNode(task));
+
+    // create link
+    const link = document.createElement("a");
+
+    // add a class
+    link.className = "delete-item secondary-content";
+
+    //   add icon
+    link.innerHTML = '<i class="fa-solid fa-trash"></i>';
+
+    // append
+    li.appendChild(link);
+
+    //   append li to ul
+    taskList.appendChild(li);
+  });
 }
 
 // add task
@@ -78,15 +117,46 @@ function removeTask(e) {
   if (e.target.parentElement.classList.contains("delete-item")) {
     if (confirm("You are about to remove a Task, confirm?")) {
       e.target.parentElement.parentElement.remove();
+
+      // remove from storage
+      removeTaskFromStorage(e.target.parentElement.parentElement);
     }
   }
+}
+
+// remove from storage
+function removeTaskFromStorage(taskItem) {
+  let tasks;
+  if (localStorage.getItem("tasks") === null) {
+    tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem("tasks"));
+  }
+
+  tasks.forEach(function (task, index) {
+    if (taskItem.textContent === task) {
+      tasks.splice(index, 1);
+    }
+  });
+
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 // clear tasks
 function clearTasks(e) {
   while (taskList.firstChild) {
-    taskList.removeChild(taskList.firstChild);
+    if (confirm("Clear all Task??")) {
+      taskList.removeChild(taskList.firstChild);
+    }
   }
+
+  // clear from storage
+  clearTaskFromStorage();
+}
+
+// clear from storage
+function clearTaskFromStorage() {
+  localStorage.clear();
 }
 
 // filter tasks
