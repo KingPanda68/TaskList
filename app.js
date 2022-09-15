@@ -145,9 +145,7 @@ function removeTaskFromStorage(taskItem) {
 // clear tasks
 function clearTasks(e) {
   while (taskList.firstChild) {
-    if (confirm("Clear all Task??")) {
-      taskList.removeChild(taskList.firstChild);
-    }
+    taskList.removeChild(taskList.firstChild);
   }
 
   // clear from storage
