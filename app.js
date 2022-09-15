@@ -10,32 +10,95 @@ loadEventListeners();
 function loadEventListeners() {
   // add task
   form.addEventListener("submit", addTask);
+
+  // remove task
+  taskList.addEventListener("click", removeTask);
+
+  // clear tasks
+  clearBtn.addEventListener("click", clearTasks);
+
+  // filter tasks
+  filter.addEventListener("keyup", filterTasks);
 }
 
 // add task
-function addTask() {
+function addTask(e) {
   if (taskInput.value === "") {
     alert("Add a Task");
   }
   //   create li
   const li = document.createElement("li");
+
   //   add a class
   li.className = "collection-item";
-  //   create tex node and append
+
+  //   create text node and append
   li.appendChild(document.createTextNode(taskInput.value));
+
   // create link
   const link = document.createElement("a");
+
   // add a class
   link.className = "delete-item secondary-content";
+
   //   add icon
-  link.innerHTML = '<i class = "fa fa-remove"></i>';
+  link.innerHTML = '<i class="fa-solid fa-trash"></i>';
+
   // append
   li.appendChild(link);
+
   //   append li to ul
   taskList.appendChild(li);
+
+  // store
+  storeTask(taskInput.value);
 
   //   clear input
   taskInput.value = "";
 
   e.preventDefault();
+}
+
+// store task
+function storeTask(task) {
+  let tasks;
+  if (localStorage.getItem("tasks") === null) {
+    tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem("tasks"));
+  }
+
+  tasks.push(task);
+
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// remove task
+function removeTask(e) {
+  if (e.target.parentElement.classList.contains("delete-item")) {
+    if (confirm("You are about to remove a Task, confirm?")) {
+      e.target.parentElement.parentElement.remove();
+    }
+  }
+}
+
+// clear tasks
+function clearTasks(e) {
+  while (taskList.firstChild) {
+    taskList.removeChild(taskList.firstChild);
+  }
+}
+
+// filter tasks
+function filterTasks(e) {
+  const text = e.target.value.toLowerCase();
+
+  document.querySelectorAll(".collection-item").forEach(function (task) {
+    const item = task.firstChild.textContent;
+    if (item.toLocaleLowerCase().indexOf(text) != -1) {
+      task.style.display = "block";
+    } else {
+      task.style.display = "none";
+    }
+  });
 }
